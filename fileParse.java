@@ -59,6 +59,20 @@ public class fileParse {
 
     }
 
+    public static int[][] copyArray(int[][] array){
+
+        int[][] newArray = new int[array.length][array[0].length];
+
+        for (int row=0;row<array.length;row++){
+            for (int col=0;col<array[row].length;col++){
+                newArray[row][col] = array[row][col];
+            }
+        }
+
+        return newArray;
+
+    }
+
     public static int[] conv1D2D(int i, int[][] r){
 
         int row = i;
