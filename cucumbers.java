@@ -1,9 +1,11 @@
+//Chris Carmine
+//main class for Advent of Code 2021 day 25
+//https://adventofcode.com/2021/day/25
+
 class cucumbers {
-
-
 public static void main(String args[]){
 
-    int[][] cucumberPosition = fileParse.parseToArray("C:\\Users\\carmi\\Documents\\git projects\\AoC2021day25\\cucumbersPart2.txt");
+    int[][] cucumberPosition = customParseRules.rules2021day25("C:\\Users\\carmi\\Documents\\git projects\\AoC2021day25\\cucumbersPart2.txt");
     int[][] cucumberMoves;
 
     //east facing cukes (1) move first, then south (2)
@@ -12,7 +14,6 @@ public static void main(String args[]){
     int steps = 0;
     boolean moves = false;
 
-    //while (steps<58){
     do {
 
         moves = false;

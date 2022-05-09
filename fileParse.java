@@ -1,13 +1,13 @@
 /***************************************
  * Chris Carmine
- * https://adventofcode.com/2021/day/25
+ * helper class for Advent of code
 ***************************************/
 import java.io.*;
 import java.util.ArrayList;
 
 public class fileParse {
 
-    public static int[][] parseToArray(String filePath){
+    public static ArrayList<String> parseToArrayList(String filePath){
 
         ArrayList<String> lines = new ArrayList<String>();
         File file=new File(filePath);
@@ -22,30 +22,7 @@ public class fileParse {
             e.printStackTrace();
         }
 
-
-        int rows = lines.size();
-        int columns = lines.get(0).length();
-        int ruleArray[][] = new int[rows][columns]; 
-
-        for (String l : lines){
-        
-            for (int col=0;col<columns;col++){
- 
-                Character c = lines.get(lines.indexOf(l)).charAt(col);
-
-                if (c.equals('.')){
-                    ruleArray[lines.indexOf(l)][col] = 0;
-                } else if (c.equals('>')){
-                    ruleArray[lines.indexOf(l)][col] = 1;
-                } else if (c.equals('v')){
-                    ruleArray[lines.indexOf(l)][col] = 2;
-                }
-            }
-
-        } //for loop
-
-
-        return ruleArray;
+        return lines;
     }
 
     public static void printArray(int[][] array){
