@@ -1,95 +1,62 @@
 /***************************************
  * Chris Carmine
- * https://adventofcode.com/2020/day/7
+ * https://adventofcode.com/2021/day/25
 ***************************************/
 import java.io.*;
 import java.util.ArrayList;
 
 public class fileParse {
 
-    public static int[][] ruleGen(){
-        ArrayList<String> bagNames = new ArrayList<String>();
-        ArrayList<String> rules = new ArrayList<String>();
-        File file=new File("C:\\Users\\carmi\\Documents\\git projects\\AoC2020day7\\rules.txt");
+    public static int[][] parseToArray(String filePath){
+
+        ArrayList<String> lines = new ArrayList<String>();
+        File file=new File(filePath);
         String line;
-        String[] splitLine;
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             while((line=br.readLine())!=null){
-
-                splitLine = line.split(" bags contain ");
-                //System.out.println(splitLine[0]);
-                bagNames.add(splitLine[0]);
-                rules.add(splitLine[1]);
+                lines.add(line);
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
 
-        int dimension = bagNames.size();
-        int ruleArray[][] = new int[dimension][dimension]; 
-        int bags=0;
-        int spaces=0;
-        int bagIDstart=0;
-        int bagIDend=0;
-        String bagID;
-        boolean lineEnd = false;
-        int bagIndex=0;
-        String target = "shiny gold"; //someday avoid hardcoding target
 
-        for (String e : bagNames){
+        int rows = lines.size();
+        int columns = lines.get(0).length();
+        int ruleArray[][] = new int[rows][columns]; 
+
+        for (String l : lines){
         
-            int i = 0;
-            lineEnd = false;
-            bags = 0;
-            // System.out.println(bagNames.get(bagNames.indexOf(e)));
-            // System.out.println(rules.get(bagNames.indexOf(e)));
-
-            while (!lineEnd){
+            for (int col=0;col<columns;col++){
  
-                Character c = rules.get(bagNames.indexOf(e)).charAt(i);
-
-                if (Character.isDigit(c)){
-                    spaces = 0;
-                    bags = Character.getNumericValue(c);
-                    //System.out.println(bags);
-                } 
-                
-                if (Character.isSpaceChar(c)){
-
-                    if (spaces == 0){
-                        bagIDstart = i+1;
-                        spaces++;
-                    } else if (spaces == 2) {
-                        bagIDend = i;
-                        bagID = rules.get(bagNames.indexOf(e)).substring(bagIDstart,bagIDend);
-                        bagIndex = bagNames.indexOf(bagID);
-                        ruleArray[bagNames.indexOf(e)][bagIndex] = bags; 
-                        spaces++;
-                        //System.out.println(bagID);
-                    } else {
-                        spaces++;
-                    }
-                }
+                Character c = lines.get(lines.indexOf(l)).charAt(col);
 
                 if (c.equals('.')){
-                    spaces = 0;
-                    bags=0;
-                    lineEnd = true;
-                    //System.out.println("Line End");
+                    ruleArray[lines.indexOf(l)][col] = 0;
+                } else if (c.equals('>')){
+                    ruleArray[lines.indexOf(l)][col] = 1;
+                } else if (c.equals('v')){
+                    ruleArray[lines.indexOf(l)][col] = 2;
                 }
-
-                i++;
             }
-
-
-
 
         } //for loop
 
 
         return ruleArray;
+    }
+
+    public static void printArray(int[][] array){
+
+        for (int row=0;row<array.length;row++){
+            for (int col=0;col<array[row].length;col++){
+                System.out.printf("%d ",array[row][col]);
+            }
+            System.out.println();
+        }
+
     }
 
     public static int[] conv1D2D(int i, int[][] r){
