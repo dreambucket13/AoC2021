@@ -1,9 +1,11 @@
+package day25;
 /***************************************
  * Chris Carmine
  * helper class for custom parse rules for Advent of code
 ***************************************/
 
 import java.util.ArrayList;
+import Fileparsing.*;
 
 public class customParseRules{
 
