@@ -1,9 +1,8 @@
-package day25;
 /***************************************
  * Chris Carmine
- * helper class for custom parse rules for Advent of code
+ * custom parse rules for Advent of code day 25
 ***************************************/
-
+package day25;
 import java.util.ArrayList;
 import Fileparsing.*;
 
