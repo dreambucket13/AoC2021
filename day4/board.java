@@ -11,20 +11,10 @@ public board(ArrayList<String> lines){
     this.boardSize = lines.size();
     this.board = new int[boardSize][boardSize];
     for (String l : lines){
-
-        String[] rawEntries = l.split("\\s+");
-        String[] entries = new String[rawEntries.length];
         //if there is a leading space, remove it
-        if (rawEntries[0].equals("")){
-                for (int i = 1; i < this.boardSize+1;i++){
-                    entries[i-1] = rawEntries[i];
-                }
-            } else {
-                for (int i = 0; i < this.boardSize;i++){
-                    entries[i] = rawEntries[i];
-                }
-            }
-        
+        String trimmed = l.trim();
+        String[] entries = trimmed.split("\\s+");
+
         for (int i = 0;i<this.boardSize;i++){
                 this.board[lines.indexOf(l)][i] = Integer.parseInt(entries[i]);
         }
