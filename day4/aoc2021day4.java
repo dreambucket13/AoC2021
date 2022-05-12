@@ -14,7 +14,7 @@ public static void main(String args[]){
 
     ArrayList<String> lines = new ArrayList<>();
 
-    lines = fileParse.parseToArrayList("C:\\Users\\carmi\\Documents\\git projects\\AoC2021\\day4\\day4test.txt");
+    lines = fileParse.parseToArrayList("C:\\Users\\carmi\\Documents\\git projects\\AoC2021\\day4\\day4data.txt");
     
     //build moves array
     String[] result = lines.get(0).split(",");
@@ -37,9 +37,26 @@ public static void main(String args[]){
         
     }
 
+    int winningMove=-1;
+    int sumUnplayed=0;
+    int move = 0;
 
-    for (board b : boards){
-        b.printBoard();
+    while (winningMove == -1 && move<moves.length){
+        for (board b : boards){
+            winningMove = b.playNum(moves[move]);
+            if (winningMove != -1){
+                sumUnplayed=b.sumUnplayed();
+                System.out.printf("Board %d winning move: %d, sum of unplayed numbers is %d%n",boards.indexOf(b)+1,winningMove,sumUnplayed);
+                System.out.printf("Final score: %d",winningMove*sumUnplayed);
+                break;
+            }
+
+        }
+    
+        if (winningMove!=-1){
+            break;
+        }
+        move++;
     }
 
 

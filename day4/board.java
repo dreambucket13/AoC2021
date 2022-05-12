@@ -2,14 +2,18 @@ package day4;
 
 import java.util.ArrayList;
 
+
 public class board {
 
 private int[][] board;
 private int boardSize;
+private int[][] playedSquares;
 
 public board(ArrayList<String> lines){
     this.boardSize = lines.size();
     this.board = new int[boardSize][boardSize];
+    this.playedSquares = new int[boardSize][boardSize];
+
     for (String l : lines){
         //if there is a leading space, remove it
         String trimmed = l.trim();
@@ -19,22 +23,90 @@ public board(ArrayList<String> lines){
                 this.board[lines.indexOf(l)][i] = Integer.parseInt(entries[i]);
         }
     }
-}
 
-public int getSquare(int row, int col){
-    return this.board[row][col];
-}
-
-public int[] getRow(int row){
-    return this.board[row];
-}
-
-public int[] getCol(int col){
-    int[] column = new int[this.boardSize];
-    for (int i=0;i<this.boardSize;i++){
-        column[i] = this.board[i][col];
+    //initialize to 1, since the challenge asks to sum unplayed squares
+    for(int row = 0; row < boardSize; row++){
+        for (int col = 0; col < boardSize; col++){
+                playedSquares[row][col]=1;
+        }
     }
-    return column;
+
+}
+
+public int playNum(int move){
+
+        for(int row = 0; row < boardSize; row++){
+            for (int col = 0; col < boardSize; col++){
+                if (board[row][col]==move){
+                    playedSquares[row][col]=0;
+                    if (isWinner()){
+                        return move;
+                    }
+                }
+            }
+        }
+    
+    //return -1 for game with no winner
+    return -1;
+}
+
+public int sumUnplayed(){
+
+    int sumOfUnPlayedSquares = 0;
+    for(int row = 0; row < boardSize; row++){
+        for (int col = 0; col < boardSize; col++){
+            sumOfUnPlayedSquares = sumOfUnPlayedSquares + board[row][col]*playedSquares[row][col];
+        }
+    }
+
+    return sumOfUnPlayedSquares;
+}
+
+private boolean rowComplete(int row){
+    int sum=0;
+    boolean complete = false;
+    for (int i=0;i<boardSize;i++){
+        sum = sum + playedSquares[row][i];
+    }
+
+    if (sum==0){
+        complete = true;
+    }
+
+    return complete;
+}
+
+private boolean colComplete(int col){
+    int sum=0;
+    boolean complete = false;
+    for (int i=0;i<boardSize;i++){
+        sum = sum + playedSquares[i][col];
+    }
+
+    if (sum==0){
+        complete = true;
+    }
+
+    return complete;
+}
+
+public boolean isWinner(){
+
+    boolean won = false;
+
+    for (int row =0; row < boardSize; row++){
+        if (rowComplete(row)){
+            won = true;
+        }
+    }
+
+    for (int col =0; col < boardSize; col++){
+        if (colComplete(col)){
+            won = true;
+        }
+    }
+
+    return won;
 }
 
 public void printBoard(){
