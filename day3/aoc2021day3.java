@@ -81,10 +81,11 @@ public static void main(String args[]){
 
  
         for (String l : lines){
+            //skip excluded lines
             if (oxygen[lines.indexOf(l)]==1) {
                 continue;
             }
-
+            //stop when only 1 line is left
             if (Arrays.stream(oxygen).sum() == rows-1){
                 break;
             }
@@ -123,10 +124,11 @@ public static void main(String args[]){
 
  
         for (String l : lines){
+            //skip lines excluded before
             if (co2[lines.indexOf(l)]==1) {
                 continue;
             }
-
+            //stop when only 1 line remains
             if (Arrays.stream(co2).sum() == rows-1){
                 break;
             }
@@ -145,7 +147,7 @@ public static void main(String args[]){
 
     int o2index = -1;
     int co2index = -1;
-
+    //now to find the last line, marked by the "0"
     for (int i = 0; i<oxygen.length;i++){
         if (oxygen[i] == 0) {
             o2index = i;
