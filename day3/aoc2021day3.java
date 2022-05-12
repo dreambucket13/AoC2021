@@ -3,6 +3,8 @@
 
 package day3;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import Fileparsing.*;
 
 
@@ -21,11 +23,15 @@ public static void main(String args[]){
     String gamma = "";
     String epsilon = "";
     int power;
+    int lifeSupport;
+
+    //part1
 
     for (int col=0;col<columns;col++){
         ones = 0;
         zeros = 0;
-            for (int i=0;i<rows;i++){
+        int i;
+            for (i=0;i<rows;i++){
                 char digit = lines.get(i).charAt(col);
 
                 if (digit == '1'){
@@ -36,7 +42,7 @@ public static void main(String args[]){
 
             }
 
-            if (ones>zeros){
+            if (ones>=zeros){
                 gamma = gamma + "1";
                 epsilon = epsilon + "0";
             } else {
@@ -45,11 +51,116 @@ public static void main(String args[]){
             }
     }
 
+    
     power = Integer.parseInt(gamma,2)*Integer.parseInt(epsilon,2);
     System.out.printf("Power consumption: %d%n",power);
 
-}
+    //part2
+    int[] oxygen = new int[lines.size()];
+    int[] co2 = new int[lines.size()];
+
+    //find o2 rating
+    for (int col=0;col<columns;col++){
+        ones = 0;
+        zeros = 0;
+        int i;
+
+        //calculate # of ones and zeros in column
+        for (i=0;i<rows;i++){
+
+            char digit = lines.get(i).charAt(col);
+            
+            if (oxygen[i]==0){ //0 means line is still in play
+                    if (digit == '1'){
+                        ones++;
+                    } else {
+                        zeros++;
+                    }
+            }
+        }
+
+ 
+        for (String l : lines){
+            if (oxygen[lines.indexOf(l)]==1) {
+                continue;
+            }
+
+            if (Arrays.stream(oxygen).sum() == rows-1){
+                break;
+            }
+
+            if (ones>=zeros){
+                if (l.charAt(col) == '0'){
+                    oxygen[lines.indexOf(l)] = 1; //1 means I exclude
+                } 
+            } else {
+                    if (l.charAt(col) == '1'){
+                        oxygen[lines.indexOf(l)] = 1; //1 means I exclude     
+                    }
+            }
+        }
+    }
+    
+    //find co2 rating
+    for (int col=0;col<columns;col++){
+        ones = 0;
+        zeros = 0;
+        int i;
+
+        //calculate # of ones and zeros in column
+        for (i=0;i<rows;i++){
+
+            char digit = lines.get(i).charAt(col);
+            
+            if (co2[i]==0){ //0 means line is still in play
+                    if (digit == '1'){
+                        ones++;
+                    } else {
+                        zeros++;
+                    }
+            }
+        }
+
+ 
+        for (String l : lines){
+            if (co2[lines.indexOf(l)]==1) {
+                continue;
+            }
+
+            if (Arrays.stream(co2).sum() == rows-1){
+                break;
+            }
+
+            if (zeros<=ones){
+                if (l.charAt(col) == '1'){
+                    co2[lines.indexOf(l)] = 1; //1 means I exclude
+                } 
+            } else {
+                if (l.charAt(col) == '0'){
+                    co2[lines.indexOf(l)] = 1; //1 means I exclude     
+                }
+            }
+        }
+    }
+
+    int o2index = -1;
+    int co2index = -1;
+
+    for (int i = 0; i<oxygen.length;i++){
+        if (oxygen[i] == 0) {
+            o2index = i;
+        } 
+
+        if (co2[i] == 0){
+            co2index = i;
+        } 
+    }
+
+    lifeSupport = Integer.parseInt(lines.get(o2index),2)*Integer.parseInt(lines.get(co2index),2);
+    System.out.printf("Life support rating: %d%n",lifeSupport);   
+
+}//main
 
 
 
-}
+}//class
