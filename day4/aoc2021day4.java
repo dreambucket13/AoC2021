@@ -14,7 +14,7 @@ public static void main(String args[]){
 
     ArrayList<String> lines = new ArrayList<>();
 
-    lines = fileParse.parseToArrayList("C:\\Users\\carmi\\Documents\\git projects\\AoC2021\\day4\\day4data.txt");
+    lines = fileParse.parseToArrayList(args[0]);
     
     //build moves array
     String[] result = lines.get(0).split(",");
