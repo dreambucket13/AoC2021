@@ -21,8 +21,7 @@ public class fileParse {
                 lines.add(line);
             }
         } catch (IOException e) {
-
-            e.printStackTrace();
+            return null;
         }
 
         return lines;
