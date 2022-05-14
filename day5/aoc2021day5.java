@@ -98,19 +98,4 @@ public static void main(String args[]){
 
 }//main
 
-private static void printMap(int[][] map,int xMax, int yMax){
-
-    for (int row = 0; row<yMax; row++){
-        for (int col = 0; col<xMax; col++){
-            if (map[row][col]==0){
-                System.out.printf(". ");
-            } else {
-                System.out.printf("%d ",map[row][col]);
-            }
-        }
-        System.out.println();
-    }
-    System.out.println("--------------------------------------------");
-}
-
 }//class
