@@ -19,8 +19,6 @@ public static void main(String args[]){
     String[] point1;
     String[] point2;
     
-    
-
     int x1;
     int x2;
     int y1;
@@ -30,9 +28,7 @@ public static void main(String args[]){
     int dangerPoints = 0;
 
     //build map
-
-    
-    int[][] map = new int[10000][10000]; //I'll shrink this when I know the real size
+    int[][] map = new int[1000][1000]; //assume this is a reasonable size
 
     for (String l : lines){
 
@@ -46,32 +42,12 @@ public static void main(String args[]){
         x2 = Integer.parseInt(point2[0]);
         y2 = Integer.parseInt(point2[1]);
 
+        // for part1, only consider non-diagonal lines
+        // if (!(x1 == x2 || y1 == y2)){
+        //     continue;
+        // }
 
-        //x2 is not always greater than x1!
-
-        int rowIterator = 1;
-        int colIterator = 1;
-
-        if (x1>x2){
-            colIterator = -1;
-        }
-
-        if (y1>y2){
-            rowIterator = -1;
-        }
-
-        for (int col = x1; col!=x2; col=col+colIterator){
-            for (int row = y1; row!=y2;row=row+rowIterator){
-                map[row][col] = map[row][col] + 1;
-                    if (map[row][col] > 1) 
-                        dangerPoints++;
-            }
-        }
-        
-
-
-
-        //find max coordinates to build proper sized map
+        //find max coordinates to print a reasonable sized map
         if (x1>xMax){
             xMax = x1;
         } if (x2>xMax){
@@ -84,21 +60,48 @@ public static void main(String args[]){
             yMax = y2;
         }
 
+        //x2 is not always greater than x1! so, I have to decide direction.
+        int rowIterator;
+        int colIterator;
+
+        if (x1>x2){
+            colIterator = -1;
+        } else if (x1<x2){
+            colIterator = 1;
+        } else {
+            colIterator = 0;
+        }
+
+        if (y1>y2){
+            rowIterator = -1;
+        } else if (y1<y2){
+            rowIterator = 1;
+        } else {
+            rowIterator = 0;
+        }
+
+        int col = x1;
+        int row = y1;
+
+        while (!(col == x2+colIterator && row == y2+rowIterator)) {
+
+            map[row][col] = map[row][col] + 1;
+                if (map[row][col] == 2) //must be exactly 2 to avoid double counting danger points
+                    dangerPoints++;
+            
+            row = row+rowIterator;
+            col = col+colIterator;
+        } 
     }
-        
-    printMap(map,xMax,yMax);        
-
-
-
-
-    
+ 
+    System.out.printf("Danger points: %d\n", dangerPoints);
 
 }//main
 
 private static void printMap(int[][] map,int xMax, int yMax){
 
-    for (int row = 0; row<=yMax; row++){
-        for (int col = 0; col<=xMax; col++){
+    for (int row = 0; row<yMax; row++){
+        for (int col = 0; col<xMax; col++){
             if (map[row][col]==0){
                 System.out.printf(". ");
             } else {
@@ -107,7 +110,7 @@ private static void printMap(int[][] map,int xMax, int yMax){
         }
         System.out.println();
     }
-
+    System.out.println("--------------------------------------------");
 }
 
 }//class
