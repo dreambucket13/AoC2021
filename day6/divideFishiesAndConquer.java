@@ -3,7 +3,7 @@
 //the idea is that each starting fish is independent, so I just need to calculate how many
 //fish a fish with a given starting timer will spawn during the specified time.
 //Then, use BigInteger class to add it add up.
-//this works only up to ~230 days thoough, as 1 even fish will exceed the max VM size!
+//this works only up to ~230 days though, as even 1 fish will exceed the max VM size!
 //next version will use files rather than RAM
 
 package day6;
