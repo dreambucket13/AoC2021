@@ -58,22 +58,22 @@ public static void main(String args[]){
 
 }//main
 
-private static void printList(ArrayList<lanternfish> list, int day){
+// private static void printList(ArrayList<lanternfish> list, int day){
 
-    if (day !=0){
-        System.out.printf("After %d day: ", day);
-    } else {
-        System.out.printf("Initial state: ");       
-    }
+//     if (day !=0){
+//         System.out.printf("After %d day: ", day);
+//     } else {
+//         System.out.printf("Initial state: ");       
+//     }
 
 
-    for (lanternfish f : list){
-        System.out.printf("%d, ", f.timer);
-    }
+//     for (lanternfish f : list){
+//         System.out.printf("%d, ", f.timer);
+//     }
 
-    System.out.println();
+//     System.out.println();
 
-}
+// }
 
 
 
