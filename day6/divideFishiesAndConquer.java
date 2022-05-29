@@ -56,7 +56,7 @@ for (byte initialTimer = (byte)0; initialTimer < (byte)6; initialTimer++){
             if (fishies[i]< (byte) 0){
                 fishies[i] = (byte) 6;
                 if (lastFishIndex == Integer.MAX_VALUE-1){
-                    System.out.println("Integer overload");
+                    System.out.println("Integer overflow");
                     return;
                 }
                 lastFishIndex++;
