@@ -1,5 +1,5 @@
 //Chris Carmine
-//Advent of code 2021 day 6 part 
+//Advent of code 2021 day 6 part 2
 //the idea is that each starting fish is independent, so I just need to calculate how many
 //fish a fish with a given starting timer will spawn during the specified time.
 //Then, use BigInteger class to add it add up.
@@ -80,7 +80,7 @@ for (int i = 0; i < startingFish.length; i++){
 
     BigInteger fish = new BigInteger(Long.toString(totalFishies[Integer.parseInt(startingFish[i])]));
     grandTotal = grandTotal.add(fish);
-    System.out.printf("Fish %s adds: %s\n",startingFish[i],grandTotal.toString());
+    //System.out.printf("Fish %s adds: %s\n",startingFish[i],grandTotal.toString());
 
 }
 
