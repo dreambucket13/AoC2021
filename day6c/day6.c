@@ -36,27 +36,26 @@ int main() {
         sixes = 1;
         eights = 1;
 
-        int cycletimer = 0;
+        int sixestimer = 0;
+        int eightstimer = 0;
 
        
         for (int day = initialtimer; day < days; day++){
 
-
-
-            if (cycletimer == 6) {
+            if (sixestimer == 6) {
                 eights = 2*sixes;
-                cycletimer++;
-            } else if (cycletimer == 8) {
+                eightstimer++;
+                sixestimer = 0;
+            } else if (eightstimer == 8) {
                 sixes = eights;
-                cycletimer = 0;
+                eightstimer = 0;
+                sixestimer++;
             } else {
-                cycletimer++;
+                sixestimer++;
+                eightstimer++;
             }
 
-
         }
-
-       
 
         spawn[initialtimer] = sixes+eights;
 
