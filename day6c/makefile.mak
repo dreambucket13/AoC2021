@@ -8,6 +8,7 @@ CFLAGS  = -Wall -g
 
   # the build target executable:
 TARGET = day6
+TEST = day6test
 DIR := ${CURDIR}
 
 #syntax is, in order to this: I need these up to date
@@ -17,6 +18,11 @@ all: $(TARGET)
 
 $(TARGET): $(TARGET).c 
 	$(CC) -o $(TARGET) $(TARGET).c $(CFLAGS)
+
+test: $(TEST)
+
+$(TEST): $(TEST).c 
+	$(CC) -o $(TEST) $(TEST).c $(CFLAGS)
 
 #windows clean
 clean:
