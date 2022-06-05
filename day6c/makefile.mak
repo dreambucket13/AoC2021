@@ -26,6 +26,7 @@ $(TEST): $(TEST).c
 
 #windows clean
 clean:
-	rm $(DIR)/*.exe
+	rm $(DIR)/$(TARGET).exe
+	rm $(DIR)/$(TEST).exe
 
 
