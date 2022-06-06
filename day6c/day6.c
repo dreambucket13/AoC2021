@@ -7,8 +7,10 @@ AoC 2021 Day 6
 #include <assert.h>
 
 #define discreteStartingTimers 6
+#define ROWS 10
+#define COLS 257
 
-__UINT64_TYPE__ multiply(int timer,int daysLeft, __UINT64_TYPE__ *resultCache[9][256]);
+__UINT64_TYPE__ multiply(int timer,int daysLeft, __UINT64_TYPE__ * cache);
 
 int main() {
 
@@ -20,12 +22,12 @@ int main() {
     int startingFish[] = {1,2,5,1,1,4,1,5,5,5,3,4,1,2,2,5,3,5,1,3,4,1,5,2,5,1,4,1,2,2,1,5,1,1,1,2,4,3,4,2,2,4,5,4,1,2,3,5,3,4,1,1,2,2,1,3,3,2,3,2,1,2,2,3,1,1,2,5,1,2,1,1,3,1,1,5,5,4,1,1,5,1,4,3,5,1,3,3,1,1,5,2,1,2,4,4,5,5,4,4,5,4,3,5,5,1,3,5,2,4,1,1,2,2,2,4,1,2,1,5,1,3,1,1,1,2,1,2,2,1,3,3,5,3,4,2,1,5,2,1,4,1,1,5,1,1,5,4,4,1,4,2,3,5,2,5,5,2,2,4,4,1,1,1,4,4,1,3,5,4,2,5,5,4,4,2,2,3,2,1,3,4,1,5,1,4,5,2,4,5,1,3,4,1,4,3,3,1,1,3,2,1,5,5,3,1,1,2,4,5,3,1,1,1,2,5,2,4,5,1,3,2,4,5,5,1,2,3,4,4,1,4,1,1,3,3,5,1,2,5,1,2,5,4,1,1,3,2,1,1,1,3,5,1,3,2,4,3,5,4,1,1,5,3,4,2,3,1,1,4,2,1,2,2,1,1,4,3,1,1,3,5,2,1,3,2,1,1,1,2,1,1,5,1,1,2,5,1,1,4};
     printf("Starting...\n");
 
-    __UINT64_TYPE__ resultCache[discreteStartingTimers+3][daysLeft];
+   __UINT64_TYPE__ resultCache[ROWS][COLS] = {0};
 
     for (initialTimer = 0; initialTimer < discreteStartingTimers; initialTimer++){
 
         //timers are plus 1 since 0 is a valid timer value
-        subtotal = 1 + multiply(initialTimer+1,daysLeft, &resultCache);
+        subtotal = 1 + multiply(initialTimer+1,daysLeft, &resultCache[0][0]);
         spawn[initialTimer] = subtotal;
         printf("initial timer %d: %lld\n",initialTimer,subtotal);
     
@@ -43,12 +45,15 @@ int main() {
 
 } //main
 
-__UINT64_TYPE__ multiply (int timer, int daysLeft, __UINT64_TYPE__ *resultCache[9][256] ){
+__UINT64_TYPE__ multiply (int timer, int daysLeft, __UINT64_TYPE__ * cache){
     
-    if (resultCache[timer][daysLeft] != 0){
-        return resultCache[timer][daysLeft];
-    }
+    int originalDaysLeft = daysLeft;
+    int originalTimer = timer;
+    __UINT64_TYPE__ cacheValue = *(cache + (unsigned long long) (timer * COLS) + daysLeft);
 
+    if (cacheValue != 0){
+        return cacheValue;
+    }
 
     //base case
     if (timer>daysLeft){
@@ -57,8 +62,8 @@ __UINT64_TYPE__ multiply (int timer, int daysLeft, __UINT64_TYPE__ *resultCache[
     //recursive case
     daysLeft -= timer;
     //timers are plus 1 since 0 is a valid timer value, so 7 is 6+1 and 9 is 8+1
-    __UINT64_TYPE__ subTotal = 1 + multiply(7,daysLeft,resultCache) + multiply(9,daysLeft,resultCache);
-    resultCache[timer][daysLeft] = subTotal;
+    __UINT64_TYPE__ subTotal = 1 + multiply(7,daysLeft,cache) + multiply(9,daysLeft,cache);
+    *(cache + (unsigned long long) ( originalTimer * COLS) + originalDaysLeft) = subTotal;
     return subTotal;
     
     }
