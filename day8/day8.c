@@ -45,6 +45,19 @@ int main() {
 
         }
 
+    /*part 2
+    for each unique character, create array of possible connections and then remove impossible ones
+    when comparing to the nominal connections for thay digit
+    start with length == 4 i.e. the number 4.  8 doesn't give any information, since all segments are lit anyway.
+
+    tokens 0 though 9 are inputs
+
+    */
+        // 0 = a, 6 = g
+        int oneNominal[7] = {0,0,1,0,0,1,0}; //cf
+        int fourNominal[7] = {0,1,1,1,0,1,0}; //bcdf
+        //an so on...
+
         for (int i = 0; i < NUM_TOKENS; i++){
             tokens[tokenIndex] = NULL;
         }
@@ -54,11 +67,7 @@ int main() {
     fclose(input);
     printf("Part 1, num uniques: %d", uniques);
 
-    //part 2
-    //for each character, create array of possible connections and then remove
-    //start with length == 4 i.e. the number 8
-    //as you progress, AND the results
-    //tokens 0 though 9 are inputs
+
 
    return 0;
 } //main
