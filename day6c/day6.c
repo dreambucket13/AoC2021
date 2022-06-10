@@ -11,7 +11,7 @@ AoC 2021 Day 6
 #define ROWS 10
 #define COLS 257
 
-uint64_t multiply(int timer,int daysLeft, uint64_t * cache);
+uint64_t multiply(int timer,int daysLeft, uint64_t (* cache) [ROWS][COLS]);
 
 int main() {
 
@@ -28,7 +28,7 @@ int main() {
     for (initialTimer = 0; initialTimer < discreteStartingTimers; initialTimer++){
 
         //timers are plus 1 since 0 is a valid timer value
-        subtotal = 1 + multiply(initialTimer+1,daysLeft, &resultCache[0][0]);
+        subtotal = 1 + multiply(initialTimer+1,daysLeft, &resultCache);
         spawn[initialTimer] = subtotal;
         printf("initial timer %d: %lld\n",initialTimer,subtotal);
     
@@ -46,11 +46,9 @@ int main() {
 
 } //main
 
-uint64_t multiply (int timer, int daysLeft, uint64_t * cache){
+uint64_t multiply (int timer, int daysLeft, uint64_t (* cache) [ROWS][COLS]){
     
-    int originalDaysLeft = daysLeft;
-    int originalTimer = timer;
-    uint64_t cacheValue = *(cache + (unsigned long long) (timer * COLS) + daysLeft);
+    uint64_t cacheValue = (*cache) [timer][daysLeft];
 
     if (cacheValue != 0){
         return cacheValue;
@@ -60,11 +58,12 @@ uint64_t multiply (int timer, int daysLeft, uint64_t * cache){
     if (timer>daysLeft){
         return 0;
     } else {
+
     //recursive case
-    daysLeft -= timer;
+
     //timers are plus 1 since 0 is a valid timer value, so 7 is 6+1 and 9 is 8+1
-    uint64_t subTotal = 1 + multiply(7,daysLeft,cache) + multiply(9,daysLeft,cache);
-    *(cache + (unsigned long long) ( originalTimer * COLS) + originalDaysLeft) = subTotal;
+    uint64_t subTotal = 1 + multiply(7,daysLeft-timer,cache) + multiply(9,daysLeft-timer,cache);
+    (*cache) [timer][daysLeft] = subTotal;
     return subTotal;
     
     }
