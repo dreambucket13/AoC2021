@@ -14,8 +14,10 @@ AoC 2021 Day 8
 #define DIGITS 10
 
 //int (*pointer)[][] is a pointer to an array of ints. int *pointer[][] is an array of pointers to ints.
-void printNominals(char* desc, int digit, int (*nominals) [DIGITS][SEGMENTS]);
-void rosetta(int digit, int (*nominals) [DIGITS][SEGMENTS], char** tokens[NUM_TOKENS], int (*possibleConnections) [SEGMENTS][SEGMENTS]);
+void printNominals(char* desc, int digit, const int (*nominals) [DIGITS][SEGMENTS]);
+void printSegments(char* desc, int seg, int (*possibleConnections) [SEGMENTS][SEGMENTS]);
+void signalsToArray(char* (*tokens)[NUM_TOKENS], int (*signals) [NUM_TOKENS][SEGMENTS] );
+void rosetta(int digit, const int (*nominals) [DIGITS][SEGMENTS], int (*signals) [NUM_TOKENS][SEGMENTS], int (*possibleConnections) [SEGMENTS][SEGMENTS]);
 
 int main() {
 
@@ -48,6 +50,8 @@ int main() {
             possibleConnections[i][j] = 1;
         }
     }
+
+    printSegments("a",0,&possibleConnections);
 
     /* Get each line until there are none left */
     while (fgets(line, MAX_LINE_LENGTH, input))
@@ -82,33 +86,63 @@ int main() {
 
     */
 
+    int signals[NUM_TOKENS][SEGMENTS] = {0};
 
+    signalsToArray(&tokens,&signals);
 
+    int oneIndex, fourIndex, sevenIndex;
+    for (int i = 0; i < 10; i++ ){
 
+        int length = strlen(tokens[i]);
+
+        switch (length){
+            case 4:
+                fourIndex = i;
+                break;
+            case 3:
+                sevenIndex = i;
+                break;
+            case 2: 
+                oneIndex = i;
+                break;
+        }
+
+    }
+
+    rosetta(fourIndex,&nominals,&signals, &possibleConnections);
+    rosetta(sevenIndex,&nominals,&signals, &possibleConnections);
+    rosetta(oneIndex,&nominals,&signals, &possibleConnections);
         
 
         for (int i = 0; i < NUM_TOKENS; i++){
             tokens[tokenIndex] = NULL;
         }
 
-   } //while
+   } // END while (fgets(line, MAX_LINE_LENGTH, input))
 
     fclose(input);
     printf("Part 1, num uniques: %d\n", uniques);
 
-                            
-    printNominals("nominal",4,&nominals);
+                 
+    printNominals("nominal",4, &nominals);
 
    return 0;
 } //main
 
-void rosetta(int digit, int (*nominals) [DIGITS][SEGMENTS], char** tokens[NUM_TOKENS], int (*possibleConnections) [SEGMENTS][SEGMENTS]){
+void rosetta(int digit, const int (*nominals) [DIGITS][SEGMENTS], int (*signals) [NUM_TOKENS][SEGMENTS], int (*possibleConnections) [SEGMENTS][SEGMENTS]){
 
     //find the token that matches the length of the nominal digit, then remove possible connections based on that
+    //call rosetta for digits 1, 4, 7.  remove possible connections based on that.
+
+
+
+
+
     return;
 }
 
-void printNominals(char* desc, int digit, int (*nominals) [DIGITS][SEGMENTS]) {
+
+void printNominals(char* desc, int digit, const int (*nominals) [DIGITS][SEGMENTS]) {
 
     printf("%d %s: ", digit, desc);
 
@@ -146,7 +180,90 @@ void printNominals(char* desc, int digit, int (*nominals) [DIGITS][SEGMENTS]) {
     return;
 }
 
+void printSegments(char* desc, int seg, int (*possibleConnections) [SEGMENTS][SEGMENTS]) {
 
+    printf("%d %s: ", seg, desc);
+
+    for (int i = 0; i <  SEGMENTS; i++){
+
+        if ((*possibleConnections)[seg][i] == 0 )
+            continue;
+            
+        switch (i){
+            case 0:
+                printf("a");
+                break;
+            case 1:
+                printf("b");
+                break;
+            case 2:
+                printf("c");
+                break;
+            case 3:
+                printf("d");
+                break;
+            case 4:
+                printf("e");
+                break;
+            case 5:
+                printf("f");
+                break;
+            case 6:
+                printf("g");
+                break;
+        };
+        
+    }
+        printf("\n");
+    return;
+}
+
+void signalsToArray(char* (*tokens)[NUM_TOKENS], int (*signals) [NUM_TOKENS][SEGMENTS] ){
+
+        int tokenIndex;
+        int charIndex;
+
+    for (tokenIndex = 0; tokenIndex < NUM_TOKENS; ++tokenIndex){
+
+        //skip the |
+        if(tokenIndex == 10) continue;
+
+        char* token = (*tokens)[tokenIndex];
+        char c;
+
+        for (charIndex = 0; charIndex < strlen(token); ++ charIndex){
+
+        c = token[charIndex];
+
+        switch (c){
+            case 'a':
+                (*signals)[tokenIndex][0] = 1;
+                break;
+            case 'b':
+                (*signals)[tokenIndex][1] = 1;
+                break;
+            case 'c':
+                (*signals)[tokenIndex][2] = 1;
+                break;
+            case 'd':
+                (*signals)[tokenIndex][3] = 1;
+                break;
+            case 'e':
+                (*signals)[tokenIndex][4] = 1;
+                break;
+            case 'f':
+                (*signals)[tokenIndex][5] = 1;
+                break;
+            case 'g':
+                (*signals)[tokenIndex][6] = 1;
+                break;
+        };
+        }
+        
+    }
+
+    return;
+}
 
 
 
