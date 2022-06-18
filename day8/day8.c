@@ -13,13 +13,19 @@ AoC 2021 Day 8
 #define SEGMENTS 7
 #define DIGITS 10
 
+
+//use these to clean up later
+typedef const int nominalArray[DIGITS][SEGMENTS];
+typedef int signalArray[NUM_TOKENS][SEGMENTS];
+typedef int connectionsArray[SEGMENTS][SEGMENTS];
+
 //int (*pointer)[][] is a pointer to an array of ints. int *pointer[][] is an array of pointers to ints.
 void printNominals(char* desc, int digit, const int (*nominals) [DIGITS][SEGMENTS]);
 void printSegments(char* desc, int seg, int (*possibleConnections) [SEGMENTS][SEGMENTS]);
 void signalsToArray(char* (*tokens)[NUM_TOKENS], int (*signals) [NUM_TOKENS][SEGMENTS] );
-void rosetta(int digit, const int (*nominals) [DIGITS][SEGMENTS], int (*signals) [NUM_TOKENS][SEGMENTS], int (*possibleConnections) [SEGMENTS][SEGMENTS]);
+void rosetta(int signalIndex, int nominalIndex, const int (*nominals) [DIGITS][SEGMENTS], int (*signals) [NUM_TOKENS][SEGMENTS], int (*possibleConnections) [SEGMENTS][SEGMENTS]);
 
-int main() {
+int main(int argc, char** argv) {
 
     FILE* input = fopen("day8test.txt","r");
     char line[MAX_LINE_LENGTH] = {0};
@@ -44,14 +50,12 @@ int main() {
     //rows are the segments. columns are possible connections
     int possibleConnections [SEGMENTS][SEGMENTS];
 
-    //start out with all possible connections
+    //start out with all connections being possible (=1)
     for (int i = 0; i < SEGMENTS; i++){
         for (int j = 0; j < SEGMENTS; j++) {
             possibleConnections[i][j] = 1;
         }
     }
-
-    printSegments("a",0,&possibleConnections);
 
     /* Get each line until there are none left */
     while (fgets(line, MAX_LINE_LENGTH, input))
@@ -109,10 +113,18 @@ int main() {
 
     }
 
-    rosetta(fourIndex,&nominals,&signals, &possibleConnections);
-    rosetta(sevenIndex,&nominals,&signals, &possibleConnections);
-    rosetta(oneIndex,&nominals,&signals, &possibleConnections);
-        
+    rosetta(fourIndex,4,&nominals,&signals, &possibleConnections);
+    rosetta(sevenIndex,7,&nominals,&signals, &possibleConnections);
+    rosetta(oneIndex,1,&nominals,&signals, &possibleConnections);
+
+
+    printSegments("a possible connections: ",0,&possibleConnections);
+    printSegments("b possible connections: ",1,&possibleConnections);
+    printSegments("c possible connections: ",2,&possibleConnections);  
+    printSegments("d possible connections: ",3,&possibleConnections);  
+    printSegments("e possible connections: ",4,&possibleConnections);
+    printSegments("f possible connections: ",5,&possibleConnections);
+    printSegments("g possible connections: ",6,&possibleConnections);    
 
         for (int i = 0; i < NUM_TOKENS; i++){
             tokens[tokenIndex] = NULL;
@@ -123,20 +135,34 @@ int main() {
     fclose(input);
     printf("Part 1, num uniques: %d\n", uniques);
 
-                 
-    printNominals("nominal",4, &nominals);
-
    return 0;
 } //main
 
-void rosetta(int digit, const int (*nominals) [DIGITS][SEGMENTS], int (*signals) [NUM_TOKENS][SEGMENTS], int (*possibleConnections) [SEGMENTS][SEGMENTS]){
+void rosetta(int signalIndex, int nominalIndex, const int (*nominals) [DIGITS][SEGMENTS], int (*signals) [NUM_TOKENS][SEGMENTS], int (*possibleConnections) [SEGMENTS][SEGMENTS]){
 
-    //find the token that matches the length of the nominal digit, then remove possible connections based on that
     //call rosetta for digits 1, 4, 7.  remove possible connections based on that.
+    //iterate over signal.  where the value in the signal matches the nominal, that is a possible connection.
 
+    //iterate over signal
+    for (int i = 0; i < SEGMENTS; i++){
 
+        int signalValue = (*signals)[signalIndex][i];
 
+        //iterate over nominals and zero out impossible connections
+        for (int j = 0; j < SEGMENTS; j++){
 
+            int nominalValue = (*nominals)[nominalIndex][j];
+
+            if (signalValue != nominalValue){
+                (*possibleConnections)[i][j] = 0;
+            }
+
+        }
+
+        //Where a segment only has 1 connection possible, zero out the corresponding connection.
+        //ex. b can only be connected to c, but c can be connected to b or d.  remove the d connection.
+
+    }
 
     return;
 }
@@ -182,7 +208,7 @@ void printNominals(char* desc, int digit, const int (*nominals) [DIGITS][SEGMENT
 
 void printSegments(char* desc, int seg, int (*possibleConnections) [SEGMENTS][SEGMENTS]) {
 
-    printf("%d %s: ", seg, desc);
+    printf("%s: ", desc);
 
     for (int i = 0; i <  SEGMENTS; i++){
 
