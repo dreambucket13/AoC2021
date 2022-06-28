@@ -26,7 +26,6 @@ int areConnectionsValid(connectionsArray (*possibleConnections));
 void copyConnections(connectionsArray (*source), connectionsArray (*destination));
 int decode(int signal, connectionsArray (*possibleConnections), signalArray (*signals), nominalArray (*nominals));
 
-
 int main(int argc, char** argv) {
 
     FILE* input = fopen("day8data.txt","r");
@@ -39,24 +38,22 @@ int main(int argc, char** argv) {
     int total = 0;
 
     //index 0 = a, 6 = g
-    const int nominals[DIGITS][SEGMENTS] = {
-                                            {1,1,1,0,1,1,1}, //0 = abcefg
-                                            {0,0,1,0,0,1,0}, //1 = cf
-                                            {1,0,1,1,1,0,1}, //2 = acdeg
-                                            {1,0,1,1,0,1,1}, //3 = acdfg
-                                            {0,1,1,1,0,1,0}, //4 = bcdf
-                                            {1,1,0,1,0,1,1}, //5 = abdfg
-                                            {1,1,0,1,1,1,1}, //6 = abdefg
-                                            {1,0,1,0,0,1,0}, //7 = acf
-                                            {1,1,1,1,1,1,1}, //8 = abcdefg
-                                            {1,1,1,1,0,1,1}  //9 = abcdfg
-                                           };
+    nominalArray nominals = {
+                            {1,1,1,0,1,1,1}, //0 = abcefg
+                            {0,0,1,0,0,1,0}, //1 = cf
+                            {1,0,1,1,1,0,1}, //2 = acdeg
+                            {1,0,1,1,0,1,1}, //3 = acdfg
+                            {0,1,1,1,0,1,0}, //4 = bcdf
+                            {1,1,0,1,0,1,1}, //5 = abdfg
+                            {1,1,0,1,1,1,1}, //6 = abdefg
+                            {1,0,1,0,0,1,0}, //7 = acf
+                            {1,1,1,1,1,1,1}, //8 = abcdefg
+                            {1,1,1,1,0,1,1}  //9 = abcdfg
+                            };
 
     
     //rows are the segments. columns are possible connections
     connectionsArray possibleConnections;
-
-
 
     /* Get each line until there are none left */
     while (fgets(line, MAX_LINE_LENGTH, input))
@@ -93,15 +90,14 @@ int main(int argc, char** argv) {
 
     */
 
-    int signals[NUM_TOKENS][SEGMENTS] = {0};
+    signalArray signals = {0};
 
     //convert text signal tokens to int array 
     signalsToArray(&tokens,&signals);
 
-    int oneIndex, fourIndex, sevenIndex, eightIndex;
+    int oneIndex, fourIndex, sevenIndex;
     int length6s[3]= {0};
     int sixesIndex = 0;
-
 
     for (int i = 0; i < 10; i++ ){
 
@@ -117,14 +113,11 @@ int main(int argc, char** argv) {
             case 2: 
                 oneIndex = i;
                 break;
-            case 7:
-                eightIndex = i;
-                break;
-            case 5:
-                break;
             case 6:
                 length6s[sixesIndex] = i;
                 sixesIndex++;
+                break;
+            default:
                 break;
         }
 
@@ -137,14 +130,12 @@ int main(int argc, char** argv) {
         }
     }
 
-    //call rosetta on the known digits based on unique token length
+    //call rosetta on the known digits based on unique token length (not 8, this gives no new information)
     rosetta(fourIndex,4,&nominals,&signals, &possibleConnections);
 
     rosetta(sevenIndex,7,&nominals,&signals, &possibleConnections);
     
     rosetta(oneIndex,1,&nominals,&signals, &possibleConnections);
-
-    rosetta(eightIndex,8,&nominals,&signals,&possibleConnections);
 
     //start guessing with the sixes
     sixesIndex = 0;
@@ -162,8 +153,6 @@ int main(int argc, char** argv) {
     #ifdef printfs
     printf("Guessing...\n");
     #endif
-
-    //0,9 1,6 2,0 guesses work, need to automate
 
     int guess = 0;
     int guessRow = 0;
@@ -226,7 +215,7 @@ int main(int argc, char** argv) {
    return 0;
 } //main
 
-void rosetta(int signalIndex, int nominalIndex, const int (*nominals) [DIGITS][SEGMENTS], int (*signals) [NUM_TOKENS][SEGMENTS], int (*possibleConnections) [SEGMENTS][SEGMENTS]){
+void rosetta(int signalIndex, int nominalIndex, nominalArray (*nominals), signalArray (*signals), connectionsArray (*possibleConnections) ){
 
     //iterate over signal.  where the value in the signal matches the nominal, that is a possible connection.
 
@@ -263,7 +252,7 @@ void rosetta(int signalIndex, int nominalIndex, const int (*nominals) [DIGITS][S
 }
 
 
-void printNominals(char* desc, int digit, const int (*nominals) [DIGITS][SEGMENTS]) {
+void printNominals(char* desc, int digit, nominalArray (*nominals) ) {
 
     printf("%d %s: ", digit, desc);
 
@@ -301,7 +290,7 @@ void printNominals(char* desc, int digit, const int (*nominals) [DIGITS][SEGMENT
     return;
 }
 
-void printSegments(char* desc, int seg, int (*possibleConnections) [SEGMENTS][SEGMENTS]) {
+void printSegments(char* desc, int seg, connectionsArray (*possibleConnections) ) {
 
     printf("%s: ", desc);
 
@@ -339,7 +328,7 @@ void printSegments(char* desc, int seg, int (*possibleConnections) [SEGMENTS][SE
     return;
 }
 
-void signalsToArray(char* (*tokens)[NUM_TOKENS], int (*signals) [NUM_TOKENS][SEGMENTS] ){
+void signalsToArray(char* (*tokens)[NUM_TOKENS], signalArray (*signals) ){
 
         int tokenIndex;
         int charIndex;
@@ -450,19 +439,6 @@ int decode(int signal, connectionsArray (*possibleConnections), signalArray (*si
 
     //descramble signal
 
-    // for (int row = 0; row < SEGMENTS; ++row){
-    //     for (int col = 0; col < SEGMENTS; ++col){
-    //         if ((*possibleConnections)[row][col] == 1 ){
-    //             //swap the signals
-    //             int temp = (*signals)[signal][row];
-    //             (*signals)[signal][row] =  (*signals)[signal][col];
-    //             (*signals)[signal][col] = temp;
-    //             break;
-                
-    //         }
-    //     }
-    // }
-
     //initialize the array to be swapped in
     int swap[7] = {0};
 
@@ -489,8 +465,6 @@ int decode(int signal, connectionsArray (*possibleConnections), signalArray (*si
     for (int i = 0; i < SEGMENTS; ++i){
         (*signals)[signal][i] = swap[i];
     }
-
-
 
     //find the nominal
 
