@@ -463,7 +463,7 @@ int decode(int signal, connectionsArray (*possibleConnections), signalArray (*si
     //     }
     // }
 
-    //keep track of segments I've corrected
+    //initialize the array to be swapped in
     int swap[7] = {0};
 
     for (int seg = 0; seg < SEGMENTS; ++seg){
@@ -512,6 +512,7 @@ int decode(int signal, connectionsArray (*possibleConnections), signalArray (*si
 
     }
 
+    //if you get here, something bad happened...
     return -1;
 
 }
