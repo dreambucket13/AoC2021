@@ -13,17 +13,15 @@ AoC 2021 Day 8
 #define SEGMENTS 7
 #define DIGITS 10
 
-
-//use these to clean up later
 typedef const int nominalArray[DIGITS][SEGMENTS];
 typedef int signalArray[NUM_TOKENS][SEGMENTS];
 typedef int connectionsArray[SEGMENTS][SEGMENTS];
 
 //int (*pointer)[][] is a pointer to an array of ints. int *pointer[][] is an array of pointers to ints.
-void printNominals(char* desc, int digit, const int (*nominals) [DIGITS][SEGMENTS]);
-void printSegments(char* desc, int seg, int (*possibleConnections) [SEGMENTS][SEGMENTS]);
-void signalsToArray(char* (*tokens)[NUM_TOKENS], int (*signals) [NUM_TOKENS][SEGMENTS] );
-void rosetta(int signalIndex, int nominalIndex, const int (*nominals) [DIGITS][SEGMENTS], int (*signals) [NUM_TOKENS][SEGMENTS], int (*possibleConnections) [SEGMENTS][SEGMENTS]);
+void printNominals(char* desc, int digit, nominalArray (*nominals) );
+void printSegments(char* desc, int seg, connectionsArray (*possibleConnections) );
+void signalsToArray(char* (*tokens)[NUM_TOKENS], signalArray (*signals) );
+void rosetta(int signalIndex, int nominalIndex, nominalArray (*nominals), signalArray (*signals), connectionsArray (*possibleConnections) );
 int areConnectionsValid(connectionsArray (*possibleConnections));
 void copyConnections(connectionsArray (*source), connectionsArray (*destination));
 int decode(int signal, connectionsArray (*possibleConnections), signalArray (*signals), nominalArray (*nominals));
@@ -101,8 +99,6 @@ int main(int argc, char** argv) {
     signalsToArray(&tokens,&signals);
 
     int oneIndex, fourIndex, sevenIndex, eightIndex;
-    int length5s[3] = {0};
-    int fivesIndex = 0;
     int length6s[3]= {0};
     int sixesIndex = 0;
 
@@ -125,8 +121,6 @@ int main(int argc, char** argv) {
                 eightIndex = i;
                 break;
             case 5:
-                length5s[fivesIndex] = i;
-                fivesIndex++;
                 break;
             case 6:
                 length6s[sixesIndex] = i;
@@ -209,14 +203,6 @@ int main(int argc, char** argv) {
     }
 
 //decode
-    printSegments("a actual positions: ",0,&possibleConnections);
-    printSegments("b actual positions: ",1,&possibleConnections);
-    printSegments("c actual positions: ",2,&possibleConnections);  
-    printSegments("d actual positions: ",3,&possibleConnections);  
-    printSegments("e actual positions: ",4,&possibleConnections);
-    printSegments("f actual positions: ",5,&possibleConnections);
-    printSegments("g actual positions: ",6,&possibleConnections);    
-    printf("\n");
 
     int thousands = 1000*decode(11,&possibleConnections,&signals,&nominals);
     int hundreds = 100*decode(12,&possibleConnections,&signals,&nominals);
@@ -232,6 +218,8 @@ int main(int argc, char** argv) {
    } // END while (fgets(line, MAX_LINE_LENGTH, input))
 
     fclose(input);
+    assert(uniques == 278);
+    assert(total == 986179);
     printf("Part 1, num uniques: %d\n", uniques);
     printf("Part 2, total: %d\n", total);
 
