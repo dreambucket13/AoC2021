@@ -13,3 +13,6 @@ I learned:
 - When stuck, draw the problem ex. as a graph
 - How to use the Java Random File Access class, only to learn just how slow file access is
 - This is a big one for me.  My final solution in C was a recursive algorithm, something I had struggled with before.
+
+## Day 8, the crossed displays
+- I think I could have spent more time solving the problem and less time playing with typedefs and data structures.  Try to use the data with minimal transformation
