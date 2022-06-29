@@ -7,8 +7,8 @@ CC = gcc
 CFLAGS  = -Wall -g
 
   # the build target executable:
-TARGET = day6
-TEST = day6test
+TARGET = day9
+INCLUDE = tokenize
 DIR := ${CURDIR}
 
 #syntax is, in order to this: I need these up to date
@@ -16,17 +16,14 @@ DIR := ${CURDIR}
 
 all: $(TARGET)
 
-$(TARGET): $(TARGET).c 
-	$(CC) -o $(TARGET) $(TARGET).c $(CFLAGS)
+$(TARGET): $(TARGET).c $(INCLUDE).o
+	$(CC) -o $(TARGET) $(TARGET).c $(INCLUDE).o $(CFLAGS)
 
-test: $(TEST)
-
-$(TEST): $(TEST).c 
-	$(CC) -o $(TEST) $(TEST).c $(CFLAGS)
+$(INCLUDE).o: $(INCLUDE).c
+	$(CC) -c $(INCLUDE).c
 
 #windows clean
 clean:
 	rm $(DIR)/$(TARGET).exe
-	rm $(DIR)/$(TEST).exe
 
 
